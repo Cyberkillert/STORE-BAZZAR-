@@ -92,6 +92,7 @@ h1 {
 .popup p {
     margin: 10px 0 20px;
     font-weight: bold;
+    text-align: left;
 }
 .popup button {
     padding: 10px 20px;
