@@ -30,10 +30,16 @@ h1 {
     text-align: center;
     background-color: #f9f9f9;
     position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: auto; /* Wrap content */
 }
 .shimmer {
     width: 100%;
-    height: 110px;
+    height: 150px;
     background: linear-gradient(
         to right,
         #f6f7f8 0%,
@@ -90,6 +96,11 @@ h1 {
     color: #000;
 }
 .popup p {
+    margin: 10px 0 20px;
+    font-weight: bold;
+    text-align: left;
+}
+.popup p#popupfee {
     margin: 10px 0 20px;
     font-weight: bold;
     text-align: left;

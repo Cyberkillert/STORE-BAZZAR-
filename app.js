@@ -22,6 +22,7 @@ const overlay = document.getElementById("overlay");
 const popupImg = document.getElementById("popupImg");
 const popupTitle = document.getElementById("popupTitle");
 const popupDescription = document.getElementById("popupDescription");
+const popupfee = document.getElementById("popupfee");
 const popupPrice = document.getElementById("popupPrice");
 const popupButton = document.getElementById("popupButton");
 
@@ -43,6 +44,7 @@ onValue(dbRef, (snapshot) => {
         const agric = item.agric ? JSON.parse(item.agric)[0] : "https://via.placeholder.com/150";
         const title = item.pdhwjcgeg || "No Title";
         const description = item.pafetcbsck || "No Description";
+        const fee = item.parwb || "free delivery";
         const price = item.pxsgyroeet || "0";
 
         const gridItem = document.createElement("div");
@@ -64,9 +66,21 @@ onValue(dbRef, (snapshot) => {
         titleElement.className = "small-title";
         titleElement.innerText = title;
 
+        const feeElement = document.createElement("p"); // Changed to <p> instead of <pf>
+        feeElement.className = "pf";
+        const parwbValue = parseFloat(fee);
+
+        if (parwbValue > 0) {
+            feeElement.style.color = "#000";
+            feeElement.innerText = `${Math.round(parwbValue)} RS`;
+        } else {
+            feeElement.style.color = "#4CAF50";
+            feeElement.innerText = "FREE delivery";
+        }
+
         const priceElement = document.createElement("p");
         priceElement.className = "price-text";
-        priceElement.innerText = ` ${price} `;
+        priceElement.innerText = `${price}`;
 
         const descriptionElement = document.createElement("p");
         descriptionElement.innerText = description;
@@ -79,9 +93,21 @@ onValue(dbRef, (snapshot) => {
         gridItem.appendChild(shimmerDiv);
         gridItem.appendChild(imgElement);
         gridItem.appendChild(titlePriceContainer);
+        gridItem.appendChild(feeElement);
         gridItem.appendChild(descriptionElement);
 
         gridItem.addEventListener("click", () => {
+            if (parwbValue > 0) {
+                popupfee.style.color = "#000";
+                popupfee.textContent = `${Math.round(parwbValue)} RS`;
+            } else {
+                popupfee.style.color = "#4CAF50";
+                popupfee.textContent = "FREE delivery";
+            }
+
+            // Set the fee text alignment to the left
+            popupfee.style.textAlign = "left"; // Ensures fee is left-aligned
+
             popupImg.src = agric;
             popupTitle.innerText = title;
             popupDescription.innerText = description;
