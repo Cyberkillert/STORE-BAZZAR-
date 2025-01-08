@@ -39,8 +39,10 @@ onValue(dbRef, (snapshot) => {
     const data = snapshot.val();
     gridView.innerHTML = "";
 
-    for (const key in data) {
-        const item = data[key];
+    // Reverse the order of the data entries
+    const reversedData = Object.entries(data).reverse();
+
+    for (const [key, item] of reversedData) {
         const agric = item.agric ? JSON.parse(item.agric)[0] : "https://via.placeholder.com/150";
         const title = item.pdhwjcgeg || "No Title";
         const description = item.pafetcbsck || "No Description";
@@ -66,13 +68,13 @@ onValue(dbRef, (snapshot) => {
         titleElement.className = "small-title";
         titleElement.innerText = title;
 
-        const feeElement = document.createElement("p"); // Changed to <p> instead of <pf>
+        const feeElement = document.createElement("p");
         feeElement.className = "pf";
         const parwbValue = parseFloat(fee);
 
         if (parwbValue > 0) {
             feeElement.style.color = "#000";
-            feeElement.innerText = `${Math.round(parwbValue)} RS`;
+            feeElement.innerText = `Delivery Fee RS. ${Math.round(parwbValue)}`;
         } else {
             feeElement.style.color = "#4CAF50";
             feeElement.innerText = "FREE delivery";
@@ -99,19 +101,18 @@ onValue(dbRef, (snapshot) => {
         gridItem.addEventListener("click", () => {
             if (parwbValue > 0) {
                 popupfee.style.color = "#000";
-                popupfee.textContent = `${Math.round(parwbValue)} RS`;
+                popupfee.textContent = `Delivery Fee RS. ${Math.round(parwbValue)}`;
             } else {
                 popupfee.style.color = "#4CAF50";
                 popupfee.textContent = "FREE delivery";
             }
 
-            // Set the fee text alignment to the left
-            popupfee.style.textAlign = "left"; // Ensures fee is left-aligned
+            popupfee.style.textAlign = "left";
 
             popupImg.src = agric;
             popupTitle.innerText = title;
             popupDescription.innerText = description;
-            popupPrice.innerText = `RS. ${price}`;
+            popupPrice.innerText = `Rs. ${price}`;
             popup.style.display = "block";
             overlay.style.display = "block";
         });

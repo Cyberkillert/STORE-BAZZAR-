@@ -4,25 +4,37 @@ body {
     padding: 0;
     text-align: center;
 }
+
 h1 {
-    margin: 20px 0;
+    margin: 10px 0;
 }
+
 .header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 20px 0;
+    background-color: #fff;
+    margin: 10px 0;
 }
+
 .header img {
     max-height: 50px;
     margin-right: 10px;
 }
+
 .grid-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 10px;
+    align-items: left;
+    
+    height: auto;
     padding: 20px;
 }
+
 .grid-item {
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -37,9 +49,22 @@ h1 {
     align-items: center;
     height: auto; /* Wrap content */
 }
+
+.grid-item h3 {
+    margin: 5px 0; /* Adjust top and bottom margins */
+}
+
+.price-text {
+    margin: 5px 0; /* Change the margin value as needed */
+}
+
+.grid-item p {
+    margin: 5px 0; /* Customize the margin for paragraphs */
+}
+
 .shimmer {
     width: 100%;
-    height: 150px;
+    height: 250px;
     background: linear-gradient(
         to right,
         #f6f7f8 0%,
@@ -54,6 +79,7 @@ h1 {
     top: 0;
     left: 0;
 }
+
 @keyframes shimmer {
     0% {
         background-position: -200% 0;
@@ -62,12 +88,16 @@ h1 {
         background-position: 200% 0;
     }
 }
+
 .grid-item img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-    display: none;
+    width: 100%; /* Ensure the image fills the width of the container */
+    height: 150px; /* Set a fixed height */
+    object-fit: contain;
+    background-color: #f0f0f0;
+    border-radius: 5px; /* Rounded corners */
+    display: block; /* Ensure the image is visible */
 }
+
 .popup {
     display: none;
     position: fixed;
@@ -83,28 +113,35 @@ h1 {
     padding: 20px;
     text-align: center;
 }
+
 .popup img {
     max-width: 100%;
-    height: auto;
+    height: 250px;
+	object-fit: contain;
+    background-color: #f0f0f0;
     border-radius: 5px;
     margin-bottom: 10px;
 }
+
 .popup h3 {
     margin: 0;
     font-size: 18px;
     font-weight: bold;
     color: #000;
 }
+
 .popup p {
     margin: 10px 0 20px;
     font-weight: bold;
     text-align: left;
 }
+
 .popup p#popupfee {
     margin: 10px 0 20px;
     font-weight: bold;
     text-align: left;
 }
+
 .popup button {
     padding: 10px 20px;
     background: #007bff;
@@ -114,9 +151,11 @@ h1 {
     cursor: pointer;
     font-size: 16px;
 }
+
 .popup button:hover {
     background: #0056b3;
 }
+
 .overlay {
     display: none;
     position: fixed;
@@ -127,36 +166,42 @@ h1 {
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
 }
+
 .popup h1 {
     font-size: 14px;
     margin-top: 10px;
     color: #555;
 }
+
 .small-title {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     margin: 0;
 }
+
 .price-text {
     margin-left: 5px;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     color: #000;
 }
+
 .title-price {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    gap: 10px;
+    gap: 5px;
     margin: 0;
 }
+
 .popup .title-price {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin: 0;
 }
+
 .popup-price {
     font-weight: bold;
     color: #000;
