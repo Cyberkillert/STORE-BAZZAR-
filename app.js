@@ -41,8 +41,13 @@ onValue(dbRef, (snapshot) => {
 
     // Reverse the order of the data entries
     const reversedData = Object.entries(data).reverse();
+	
 
     for (const [key, item] of reversedData) {
+		
+		if ('dogwcu' in item) {
+            continue; // Skip this iteration
+        }
         const agric = item.agric ? JSON.parse(item.agric)[0] : "https://via.placeholder.com/150";
         const title = item.pdhwjcgeg || "No Title";
         const description = item.pafetcbsck || "No Description";
