@@ -1,34 +1,1113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STORE BAZZAR</title>
-	<meta name="description" content="Welcome to STORE BAZAAR, your one-stop shop for amazing deals and products. Explore now!">
-    <link rel="stylesheet" href="styles.css">
-	<link rel="icon" href="https://i.ibb.co/xhf0NxW/trashed-1738476640-icon.png" type="image/png">
-</head>
-<body>
-    <div class="header">
-        <img src="https://i.ibb.co/xhf0NxW/trashed-1738476640-icon.png" alt="Store Icon">
-        <h1>STORE BAZZAR</h1>
+    <title>Store Bazar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=Syne:wght@400;500;600;700;800&amp;family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <!-- LOADING -->
+    <div id="pageLoading" class="page-loading">
+      <div class="pl-spinner"></div>
+      <div class="pl-brand">🛒 Store Bazar</div>
     </div>
-		<p id="ht"> makeing barpali smart</p>
-    </div>
-    <div class="grid-container" id="gridView"></div>
-
-    <div class="overlay" id="overlay"></div>
-    <div class="popup" id="popup">
-        <img id="popupImg" src="" alt="Popup Image">
-        <div class="title-price">
-            <h3 id="popupTitle">Title</h3>
-            <p id="popupPrice" class="popup-price">0</p>
+    <!-- AUTH -->
+    <div id="authModal" class="auth-overlay active">
+      <div class="auth-box">
+        <div class="auth-logo-wrap">🛒</div>
+        <h1 class="auth-brand-name">Store Bazar</h1>
+        <p class="auth-tagline">Your neighbourhood marketplace</p>
+        <div id="authError" class="auth-error hidden"></div>
+        <button class="btn-google-big" id="googleSignInBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+          </svg>
+          Sign in with Google
+        </button>
+        &gt;
+        <div class="auth-divider-line">
+          <span>or</span>
         </div>
-        <p id="popupfee">fee</p> <!-- Changed <pf> to <p> -->
-        <p id="popupDescription">Description</p>
-        <button id="popupButton">Download STORE BAZZAR</button>
-        <h1>To make a purchase, download the app now</h1>
+        <button class="btn-guest" id="browseGuestBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Browse as Guest
+        </button>
+        <p class="auth-terms">Sign in required only when placing an order</p>
+      </div>
     </div>
-    <script type="module" src="app.js"></script>
-</body>
-</html>
+    <!-- BLOCKED -->
+    <div id="blockedModal" class="auth-overlay hidden">
+      <div class="auth-box" style="text-align:center">
+        <div style="font-size:60px;margin-bottom:16px">🚫</div>
+        <h2 style="font-family:var(--font-u);margin-bottom:10px">Account Suspended</h2>
+        <p style="color:var(--text2);font-size:14px;margin-bottom:24px">Your account has been suspended. Please contact support.</p>
+        <button class="btn-primary full" id="blockedLogoutBtn">Sign Out</button>
+      </div>
+    </div>
+    <!-- APP -->
+    <div id="app" class="hidden">
+      <!-- ═══ NAVBAR ═══ -->
+      <nav class="navbar">
+        <div class="nav-brand" id="navBrandBtn">
+          <span>🛒</span>
+          <span class="brand-label">Store Bazar</span>
+        </div>
+        <!-- Search -->
+        <div class="nav-search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <input type="text" id="globalSearch" placeholder="Search products…">
+        </div>
+        <!-- Tab navigation -->
+        <div class="nav-tabs">
+          <button class="nav-tab active" data-tab="home">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            Home
+          </button>
+          <button class="nav-tab" data-tab="categories">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            Categories
+          </button>
+          <button class="nav-tab" data-tab="sell">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Sell
+          </button>
+          <button class="nav-tab" data-tab="orders">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            Orders
+          </button>
+        </div>
+        <!-- Right actions -->
+        <div class="nav-right">
+          <button class="cart-btn" id="cartNavBtn">
+            <div class="cart-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </svg>
+              <span class="cart-badge hidden" id="cartCount">0</span>
+            </div>
+          </button>
+          <div class="nav-user-info" id="navUserArea">
+            <img id="navAvatarImg" class="nav-dp hidden" src="" alt="">
+            <span id="navAvatarLetter" class="nav-dp-letter">U</span>
+          </div>
+          <button class="signout-btn" id="logoutBtn" title="Sign out">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          </button>
+        </div>
+      </nav>
+      <!-- ═══ MOBILE NAV ═══ -->
+      <nav class="mobile-nav">
+        <button class="mob-btn active" data-tab="home">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          </svg>
+          <span>Home</span>
+        </button>
+        <button class="mob-btn" data-tab="categories">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+          <span>Categories</span>
+        </button>
+        <button class="mob-btn" data-tab="sell">
+          <div class="mob-sell-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </div>
+        </button>
+        <button class="mob-btn" data-tab="orders">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+          </svg>
+          <span>Orders</span>
+        </button>
+        <button class="mob-btn" id="mobCartBtn">
+          <div class="cart-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+            </svg>
+            <span class="cart-badge hidden" id="mobCartCount">0</span>
+          </div>
+          <span>Cart</span>
+        </button>
+      </nav>
+      <!-- CART DRAWER -->
+      <div id="cartOverlay" class="cart-overlay hidden"></div>
+      <aside id="cartDrawer" class="cart-drawer">
+        <div class="cart-head">
+          <h2>Shopping Cart</h2>
+          <button id="cartCloseBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div id="cartItems" class="cart-items-list"></div>
+        <div class="cart-foot hidden" id="cartFoot">
+          <div class="cart-total-row">
+            <span>Total</span>
+            <strong id="cartTotal">₹0.00</strong>
+          </div>
+          <button class="btn-primary full" id="checkoutBtn">Checkout</button>
+          <button class="btn-sec full" id="clearCartBtn" style="margin-top:8px">Clear Cart</button>
+        </div>
+      </aside>
+      <!-- NOTIFICATION BANNER -->
+      <div id="notifBanner" class="notif-banner hidden">
+        <span id="notifText"></span>
+        <button id="notifClose">✕</button>
+      </div>
+      <!-- ═══════════════════════════════════
+       TAB VIEWS (shown/hidden by nav-tab)
+  ════════════════════════════════════ -->
+      <!-- ── HOME TAB ── -->
+      <div id="homeTab" class="tab-view active">
+        <div class="hero">
+          <div class="hero-text">
+            <p class="hero-eye">Discover · Buy · Sell</p>
+            <h1 class="hero-h1">
+              Everything in
+              <br>
+              <em>One Bazar</em>
+            </h1>
+            <p class="hero-p">Find unique products from trusted local sellers, or list your own today.</p>
+          </div>
+          <div class="hero-vis">
+            <div class="hero-blob"></div>
+            <div class="float-tag t1">🛍️ Live Listings</div>
+            <div class="float-tag t2">🔒 Safe &amp; Secure</div>
+            <div class="float-tag t3">⚡ Instant Orders</div>
+          </div>
+        </div>
+        <div id="activeFilter" class="filter-bar hidden">
+          <span id="filterLabel"></span>
+          <button id="clearFilter">✕ Clear</button>
+        </div>
+        <section class="sec">
+          <div class="sec-hd">
+            <h2 id="productsHeading">All Products</h2>
+            <span class="sec-line"></span>
+          </div>
+          <div class="prod-grid" id="productsGrid">
+            <div class="loading-state">
+              <div class="spinner"></div>
+              <p>Loading products…</p>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- ── CATEGORIES TAB ── -->
+      <div id="categoriesTab" class="tab-view hidden">
+        <div class="tab-page-hd">
+          <h1>Categories</h1>
+          <p>Browse by product category</p>
+        </div>
+        <div class="cat-grid-full" id="categoriesGrid"></div>
+        <!-- Products filtered by selected category -->
+        <div id="catProductsSection" class="hidden">
+          <div class="sec-hd" style="margin-top:40px">
+            <h2 id="catProductsHeading">Products</h2>
+            <span class="sec-line"></span>
+            <button class="btn-sec" id="backToCatsBtn" style="white-space:nowrap">← All Categories</button>
+          </div>
+          <div class="prod-grid" id="catProductsGrid"></div>
+        </div>
+      </div>
+      <!-- ── SELL TAB ── -->
+      <div id="sellTab" class="tab-view hidden">
+        <div id="uploadDisabledBanner" class="alert-banner hidden">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          Product uploads are currently disabled by the administrator.
+        </div>
+        <div id="uploadFormWrap">
+          <div class="tab-page-hd">
+            <h1>List a Product</h1>
+            <p>Publish your product to Store Bazar</p>
+          </div>
+          <form id="uploadForm" class="upload-form">
+            <div class="form-grid">
+              <div class="form-col">
+                <div class="form-sec">
+                  <h3 class="fs-title">📦 Product Details</h3>
+                  <div class="fg">
+                    <label>
+                      Product Name
+                      <span class="req">*</span>
+                    </label>
+                    <input type="text" id="prodName" placeholder="e.g. Wireless Headphones" required>
+                  </div>
+                  <div class="fg">
+                    <label>
+                      Category
+                      <span class="req">*</span>
+                    </label>
+                    <div class="cat-picker" id="catPicker">
+                      <div class="cat-selected" id="catSelected">
+                        <span class="cat-icon">📦</span>
+                        <span class="cat-text">Select category</span>
+                        <span class="cat-arrow">⌄</span>
+                      </div>
+                      <div class="cat-dropdown hidden" id="catDropdown"></div>
+                    </div>
+                    <!-- hidden select (IMPORTANT for form submit) -->
+                    <select id="prodCategory" required hidden></select>
+                  </div>
+                  <div class="fg">
+                    <label>
+                      Description
+                      <span class="req">*</span>
+                    </label>
+                    <textarea id="prodDescription" rows="4" placeholder="Describe your product in detail…" required></textarea>
+                  </div>
+                  <div class="form-row">
+                    <div class="fg">
+                      <label>
+                        Price (INR)
+                        <span class="req">*</span>
+                      </label>
+                      <div class="inp-pre">
+                        <span>₹</span>
+                        <input type="number" id="prodPrice" min="0" step="0.01" placeholder="0.00" required>
+                      </div>
+                    </div>
+                    <div class="fg">
+                      <label>Date Listed</label>
+                      <input type="date" id="prodDate">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-sec">
+                  <h3 class="fs-title">📊 Inventory</h3>
+                  <div class="form-row">
+                    <div class="fg">
+                      <label>
+                        Min Qty
+                        <span class="req">*</span>
+                      </label>
+                      <input type="number" id="prodMinQty" min="1" placeholder="1" required>
+                    </div>
+                    <div class="fg">
+                      <label>
+                        Max Qty
+                        <span class="req">*</span>
+                      </label>
+                      <input type="number" id="prodMaxQty" min="1" placeholder="100" required>
+                    </div>
+                  </div>
+                  <div class="fg">
+                    <label class="title">Availability</label>
+                    <div class="radio-group">
+                      <label class="radio-card">
+                        <input type="radio" name="avail" value="In Stock" checked>
+                        <div class="card">
+                          <span class="icon">✅</span>
+                          <span class="text">In Stock</span>
+                        </div>
+                      </label>
+                      <label class="radio-card">
+                        <input type="radio" name="avail" value="Low Stock">
+                        <div class="card">
+                          <span class="icon">⚠️</span>
+                          <span class="text">Low Stock</span>
+                        </div>
+                      </label>
+                      <label class="radio-card">
+                        <input type="radio" name="avail" value="Out of Stock">
+                        <div class="card">
+                          <span class="icon">❌</span>
+                          <span class="text">Out of Stock</span>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <!-- SIZE & COLOUR — shown only for Fashion/Footwear -->
+                <div class="form-sec" id="fashionSection" style="display:none">
+                  <h3 class="fs-title">
+                    👗 Sizes &amp; Colours
+                    <span style="font-weight:400;color:var(--text3);font-size:10px;text-transform:none;letter-spacing:0">(optional)</span>
+                  </h3>
+                  <div class="fg">
+                    <label>Available Sizes</label>
+                    <div class="size-chips-wrap" id="sizeChipsWrap"></div>
+                    <div class="size-custom-row">
+                      <input type="text" id="customSizeInput" placeholder="Add custom size (e.g. XL, 42, 10.5)">
+                      <button type="button" id="addCustomSizeBtn" class="btn-chip-add">+ Add</button>
+                    </div>
+                    <div class="hint">Tap to toggle. Selected sizes will be saved with the product.</div>
+                  </div>
+                  <div class="fg" style="margin-top:4px">
+                    <label>Available Colours</label>
+                    <div class="colour-chips-wrap" id="colourChipsWrap"></div>
+                    <div class="size-custom-row">
+                      <input type="text" id="customColourInput" placeholder="Add colour (e.g. Navy Blue)">
+                      <button type="button" id="addCustomColourBtn" class="btn-chip-add">+ Add</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-sec">
+                  <h3 class="fs-title">💳 Payment Methods</h3>
+                  <div class="check-group">
+                    <label class="check-card">
+                      <input type="checkbox" name="payment" value="online upi" checked>
+                      <div class="card">
+                        <span class="icon">💳</span>
+                        <span class="text">online upi</span>
+                      </div>
+                    </label>
+                    <label class="check-card">
+                      <input type="checkbox" name="payment" value="Cash on Delivery">
+                      <div class="card">
+                        <span class="icon">💵</span>
+                        <span class="text">Cash on Delivery</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-col">
+                <div class="form-sec">
+                  <h3 class="fs-title">🖼️ Product Images</h3>
+                  <div class="img-drop" id="imageUploadArea">
+                    <input type="file" id="imageInput" multiple accept="image/*" class="hidden-file">
+                    <div id="uploadPlaceholder" class="drop-ph">
+                      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="17 8 12 3 7 8" />
+                        <line x1="12" y1="3" x2="12" y2="15" />
+                      </svg>
+                      <p>
+                        Tap to pick images or
+                        <span class="drop-link">browse</span>
+                      </p>
+                      <small>PNG, JPG · Max images set by admin (default 4)</small>
+                    </div>
+                    <div id="imagePreviewGrid" class="img-preview-grid hidden"></div>
+                    <button type="button" class="add-more-btn" id="addMoreImgsBtn">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                      </svg>
+                      Add more images
+                    </button>
+                  </div>
+                  <div id="uploadProgress" class="up-prog hidden">
+                    <div class="prog-bar">
+                      <div id="progressFill" class="prog-fill"></div>
+                    </div>
+                    <span id="progressText">Uploading…</span>
+                  </div>
+                </div>
+                <div class="form-sec">
+                  <h3 class="fs-title">ℹ️ Additional Info</h3>
+                  <div class="fg">
+                    <label>Brand / Store Name</label>
+                    <input type="text" id="prodBrand" placeholder="Your brand or store">
+                  </div>
+                  <div class="fg">
+                    <label>SKU</label>
+                    <input type="text" id="prodSku" placeholder="SKU-001">
+                  </div>
+                  <div class="fg">
+                    <label>Weight (kg)</label>
+                    <input type="number" id="prodWeight" min="0" step="0.1" placeholder="0.0">
+                  </div>
+                  <div class="fg">
+                    <label>Dimensions</label>
+                    <input type="text" id="prodDimensions" placeholder="30×20×10 cm">
+                  </div>
+                  <div class="fg">
+                    <label>Tags</label>
+                    <input type="text" id="prodTags" placeholder="wireless, audio, bluetooth">
+                  </div>
+                </div>
+                <div id="uploadError" class="msg-err hidden"></div>
+                <div id="uploadSuccess" class="msg-ok hidden"></div>
+                <div class="submit-wrap">
+                  <button type="submit" class="btn-primary full btn-lg" id="submitProduct">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="17 8 12 3 7 8" />
+                      <line x1="12" y1="3" x2="12" y2="15" />
+                    </svg>
+                    Publish Product
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- ── ORDERS TAB ── -->
+      <div id="ordersTab" class="tab-view hidden">
+        <div class="tab-page-hd">
+          <h1>My Orders</h1>
+          <p>Your purchases and active listings</p>
+        </div>
+        <div class="tab-row">
+          <button class="tab-btn active" data-otab="purchases">Purchases</button>
+          <button class="tab-btn" data-otab="listings">My Listings</button>
+        </div>
+        <div id="purchasesTab">
+          <div id="purchasesList" class="orders-list"></div>
+        </div>
+        <div id="listingsTab" class="hidden">
+          <div id="listingsList" class="orders-list"></div>
+        </div>
+      </div>
+      <!-- ── PRODUCT VIEW (overlay-style within app) ── -->
+      <div id="productPage" class="tab-view hidden">
+        <div id="productView" class="product-view-wrap"></div>
+      </div>
+      <!-- ── SEARCH RESULTS ── -->
+      <div id="searchPage" class="tab-view hidden">
+        <div class="tab-page-hd">
+          <h1>Search Results</h1>
+          <p id="searchResultsLabel"></p>
+        </div>
+        <div class="prod-grid" id="searchGrid"></div>
+      </div>
+      <!-- ── ORDER REVIEW (between cart and checkout) ── -->
+      <div id="reviewPage" class="tab-view hidden">
+        <div class="tab-page-hd">
+          <h1>Review Order</h1>
+          <p>Check your items before placing the order</p>
+        </div>
+        <div class="review-grid">
+          <!-- Items list -->
+          <div class="review-items-col">
+            <div class="review-card">
+              <div class="review-card-hd">
+                <h3>🛒 Items in Cart</h3>
+                <span class="review-count" id="reviewItemCount">0 items</span>
+              </div>
+              <div id="reviewItemsList"></div>
+            </div>
+          </div>
+          <!-- Summary + proceed -->
+          <div class="review-aside-col">
+            <div class="review-card">
+              <div class="review-card-hd">
+                <h3>💰 Price Summary</h3>
+              </div>
+              <div id="reviewPriceRows"></div>
+              <div class="review-total-row">
+                <span>Total</span>
+                <strong id="reviewTotal">₹0.00</strong>
+              </div>
+            </div>
+            <div class="review-card">
+              <div class="review-card-hd">
+                <h3>🚚 Delivery Info</h3>
+              </div>
+              <p class="review-hint">Free delivery on all orders. Expected: 3–5 business days.</p>
+              <div class="review-pay-accepted" id="reviewPayMethods"></div>
+            </div>
+            <button class="btn-primary full btn-lg" id="reviewProceedBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+              Proceed to Checkout
+            </button>
+            <button class="btn-sec full" id="reviewBackBtn" style="margin-top:10px">← Continue Shopping</button>
+          </div>
+        </div>
+      </div>
+      <!-- ── CHECKOUT ── -->
+      <div id="checkoutPage" class="tab-view hidden">
+        <div class="tab-page-hd">
+          <h1>Checkout</h1>
+          <p>Fill in your details to place the order</p>
+        </div>
+        <div class="checkout-grid">
+          <!-- Left: order summary (compact) -->
+          <div>
+            <div class="form-sec" style="margin-bottom:16px">
+              <h3 class="fs-title">🛒 Order Summary</h3>
+              <div id="checkoutItems"></div>
+              <div class="co-total-row">
+                <span>Total</span>
+                <strong id="coTotal">₹0.00</strong>
+              </div>
+            </div>
+          </div>
+          <!-- Right: shipping form -->
+          <div class="form-sec checkout-aside">
+            <h3 class="fs-title">📍 Shipping &amp; Payment</h3>
+            <div class="fg">
+              <label>
+                Full Name
+                <span class="req">*</span>
+              </label>
+              <input type="text" id="coName" placeholder="Your full name">
+            </div>
+            <div class="fg">
+              <label>
+                Phone
+                <span class="req">*</span>
+              </label>
+              <input type="text" id="coPhone" placeholder="+91 98765 43210">
+            </div>
+            <!-- Address with auto-detect button -->
+            <div class="fg">
+              <label>
+                Delivery Address
+                <span class="req">*</span>
+              </label>
+              <div class="address-field-wrap">
+                <textarea id="coAddress" rows="3" placeholder="Street, City, State, Country…"></textarea>
+                <button type="button" class="btn-locate" id="locateBtn" title="Detect my location">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+                    <circle cx="12" cy="12" r="8" stroke-dasharray="2 3" />
+                  </svg>
+                  <span id="locateBtnText">Detect Location</span>
+                </button>
+              </div>
+              <div id="locationStatus" class="location-status hidden"></div>
+            </div>
+            <div class="fg">
+              <label>Payment Method</label>
+              <select id="coPayment">
+                <option>Cash on Delivery</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Notes (optional)</label>
+              <textarea id="coNotes" rows="2" placeholder="Any special instructions…"></textarea>
+            </div>
+            <div id="coError" class="msg-err hidden"></div>
+            <button class="btn-primary full btn-lg" id="placeOrderBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Place Order
+            </button>
+            <button class="btn-sec full" id="backToCartBtn" style="margin-top:10px">← Back to Review</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /app -->
+    <!-- SIGN-IN GATE (for guests trying to order/sell) -->
+    <div id="signInGateModal" class="auth-overlay hidden">
+      <div class="auth-box signin-gate-box">
+        <div class="gate-emoji">🔐</div>
+        <h2 class="gate-heading">Sign in to Continue</h2>
+        <p class="gate-desc" id="gateModalDesc">You need a Google account to complete this action. Your cart will be saved.</p>
+        <div id="gateAuthError" class="auth-error hidden"></div>
+        <button class="btn-google-big" id="gateGoogleBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+          </svg>
+          Continue with Google
+        </button>
+        <button class="btn-gate-cancel" id="gateCancelBtn">← Continue browsing</button>
+      </div>
+    </div>
+    <div id="toast" class="toast hidden"></div>
+    <script type="module" src="app.js">
+ 			   
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Bazar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=Syne:wght@400;500;600;700;800&amp;family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- LOADING -->
+    <div id="pageLoading" class="page-loading">
+      <div class="pl-spinner"></div>
+      <div class="pl-brand">🛒 Store Bazar</div>
+    </div>
+    <!-- AUTH -->
+    <div id="authModal" class="auth-overlay active">
+      <div class="auth-box">
+        <div class="auth-logo-wrap">🛒</div>
+        <h1 class="auth-brand-name">Store Bazar</h1>
+        <p class="auth-tagline">Your neighbourhood marketplace</p>
+        <div id="authError" class="auth-error hidden"></div>
+        <button class="btn-google-big" id="googleSignInBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+          </svg>
+          Sign in with Google
+        </button>
+        &gt;
+        <div class="auth-divider-line">
+          <span>or</span>
+        </div>
+        <button class="btn-guest" id="browseGuestBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Browse as Guest
+        </button>
+        <p class="auth-terms">Sign in required only when placing an order</p>
+      </div>
+    </div>
+    <!-- BLOCKED -->
+    <div id="blockedModal" class="auth-overlay hidden">
+      <div class="auth-box" style="text-align:center">
+        <div style="font-size:60px;margin-bottom:16px">🚫</div>
+        <h2 style="font-family:var(--font-u);margin-bottom:10px">Account Suspended</h2>
+        <p style="color:var(--text2);font-size:14px;margin-bottom:24px">Your account has been suspended. Please contact support.</p>
+        <button class="btn-primary full" id="blockedLogoutBtn">Sign Out</button>
+      </div>
+    </div>
+    <!-- APP -->
+    <div id="app" class="hidden">
+      <!-- ═══ NAVBAR ═══ -->
+      <nav class="navbar">
+        <div class="nav-brand" id="navBrandBtn">
+          <span>🛒</span>
+          <span class="brand-label">Store Bazar</span>
+        </div>
+        <!-- Search -->
+        <div class="nav-search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <input type="text" id="globalSearch" placeholder="Search products…">
+        </div>
+        <!-- Tab navigation -->
+        <div class="nav-tabs">
+          <button class="nav-tab active" data-tab="home">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            Home
+          </button>
+          <button class="nav-tab" data-tab="categories">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            Categories
+          </button>
+          <button class="nav-tab" data-tab="sell">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Sell
+          </button>
+          <button class="nav-tab" data-tab="orders">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            Orders
+          </button>
+        </div>
+        <!-- Right actions -->
+        <div class="nav-right">
+          <button class="cart-btn" id="cartNavBtn">
+            <div class="cart-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </svg>
+              <span class="cart-badge hidden" id="cartCount">0</span>
+            </div>
+          </button>
+          <div class="nav-user-info" id="navUserArea">
+            <img id="navAvatarImg" class="nav-dp hidden" src="" alt="">
+            <span id="navAvatarLetter" class="nav-dp-letter">U</span>
+          </div>
+          <button class="signout-btn" id="logoutBtn" title="Sign out">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          </button>
+        </div>
+      </nav>
+      <!-- ═══ MOBILE NAV ═══ -->
+      <nav class="mobile-nav">
+        <button class="mob-btn active" data-tab="home">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          </svg>
+          <span>Home</span>
+        </button>
+        <button class="mob-btn" data-tab="categories">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+          <span>Categories</span>
+        </button>
+        <button class="mob-btn" data-tab="sell">
+          <div class="mob-sell-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </div>
+        </button>
+        <button class="mob-btn" data-tab="orders">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+          </svg>
+          <span>Orders</span>
+        </button>
+        <button class="mob-btn" id="mobCartBtn">
+          <div class="cart-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+            </svg>
+            <span class="cart-badge hidden" id="mobCartCount">0</span>
+          </div>
+          <span>Cart</span>
+        </button>
+      </nav>
+      <!-- CART DRAWER -->
+      <div id="cartOverlay" class="cart-overlay hidden"></div>
+      <aside id="cartDrawer" class="cart-drawer">
+        <div class="cart-head">
+          <h2>Shopping Cart</h2>
+          <button id="cartCloseBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div id="cartItems" class="cart-items-list"></div>
+        <div class="cart-foot hidden" id="cartFoot">
+          <div class="cart-total-row">
+            <span>Total</span>
+            <strong id="cartTotal">₹0.00</strong>
+          </div>
+          <button class="btn-primary full" id="checkoutBtn">Checkout</button>
+          <button class="btn-sec full" id="clearCartBtn" style="margin-top:8px">Clear Cart</button>
+        </div>
+      </aside>
+      <!-- NOTIFICATION BANNER -->
+      <div id="notifBanner" class="notif-banner hidden">
+        <span id="notifText"></span>
+        <button id="notifClose">✕</button>
+      </div>
+      <!-- ═══════════════════════════════════
+       TAB VIEWS (shown/hidden by nav-tab)
+  ════════════════════════════════════ -->
+      <!-- ── HOME TAB ── -->
+      <div id="homeTab" class="tab-view active">
+        <div class="hero">
+          <div class="hero-text">
+            <p class="hero-eye">Discover · Buy · Sell</p>
+            <h1 class="hero-h1">
+              Everything in
+              <br>
+              <em>One Bazar</em>
+            </h1>
+            <p class="hero-p">Find unique products from trusted local sellers, or list your own today.</p>
+          </div>
+          <div class="hero-vis">
+            <div class="hero-blob"></div>
+            <div class="float-tag t1">🛍️ Live Listings</div>
+            <div class="float-tag t2">🔒 Safe &amp; Secure</div>
+            <div class="float-tag t3">⚡ Instant Orders</div>
+          </div>
+        </div>
+        <div id="activeFilter" class="filter-bar hidden">
+          <span id="filterLabel"></span>
+          <button id="clearFilter">✕ Clear</button>
+        </div>
+        <section class="sec">
+          <div class="sec-hd">
+            <h2 id="productsHeading">All Products</h2>
+            <span class="sec-line"></span>
+          </div>
+          <div class="prod-grid" id="productsGrid">
+            <div class="loading-state">
+              <div class="spinner"></div>
+              <p>Loading products…</p>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- ── CATEGORIES TAB ── -->
+      <div id="categoriesTab" class="tab-view hidden">
+        <div class="tab-page-hd">
+          <h1>Categories</h1>
+          <p>Browse by product category</p>
+        </div>
+        <div class="cat-grid-full" id="categoriesGrid"></div>
+        <!-- Products filtered by selected category -->
+        <div id="catProductsSection" class="hidden">
+          <div class="sec-hd" style="margin-top:40px">
+            <h2 id="catProductsHeading">Products</h2>
+            <span class="sec-line"></span>
+            <button class="btn-sec" id="backToCatsBtn" style="white-space:nowrap">← All Categories</button>
+          </div>
+          <div class="prod-grid" id="catProductsGrid"></div>
+        </div>
+      </div>
+      <!-- ── SELL TAB ── -->
+      <div id="sellTab" class="tab-view hidden">
+        <div id="uploadDisabledBanner" class="alert-banner hidden">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          Product uploads are currently disabled by the administrator.
+        </div>
+        <div id="uploadFormWrap">
+          <div class="tab-page-hd">
+            <h1>List a Product</h1>
+            <p>Publish your product to Store Bazar</p>
+          </div>
+          <form id="uploadForm" class="upload-form">
+            <div class="form-grid">
+              <div class="form-col">
+                <div class="form-sec">
+                  <h3 class="fs-title">📦 Product Details</h3>
+                  <div class="fg">
+                    <label>
+                      Product Name
+                      <span class="req">*</span>
+                    </label>
+                    <input type="text" id="prodName" placeholder="e.g. Wireless Headphones" required>
+                  </div>
+                  <div class="fg">
+                    <label>
+                      Category
+                      <span class="req">*</span>
+                    </label>
+                    <div class="cat-picker" id="catPicker">
+                      <div class="cat-selected" id="catSelected">
+                        <span class="cat-icon">📦</span>
+                        <span class="cat-text">Select category</span>
+                        <span class="cat-arrow">⌄</span>
+                      </div>
+                      <div class="cat-dropdown hidden" id="catDropdown"></div>
+                    </div>
+                    <!-- hidden select (IMPORTANT for form submit) -->
+                    <select id="prodCategory" required hidden></select>
+                  </div>
+                  <div class="fg">
+                    <label>
+                      Description
+                      <span class="req">*</span>
+                    </label>
+                    <textarea id="prodDescription" rows="4" placeholder="Describe your product in detail…" required></textarea>
+                  </div>
+                  <div class="form-row">
+                    <div class="fg">
+                      <label>
+                        Price (INR)
+                        <span class="req">*</span>
+                      </label>
+                      <div class="inp-pre">
+                        <span>₹</span>
+                        <input type="number" id="prodPrice" min="0" step="0.01" placeholder="0.00" required>
+                      </div>
+                    </div>
+                    <div class="fg">
+                      <label>Date Listed</label>
+                      <input type="date" id="prodDate">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-sec">
+                  <h3 class="fs-title">📊 Inventory</h3>
+                  <div class="form-row">
+                    <div class="fg">
+                      <label>
+                        Min Qty
+                        <span class="req">*</span>
+                      </label>
+                      <input type="number" id="prodMinQty" min="1" placeholder="1" required>
+                    </div>
+                    <div class="fg">
+                      <label>
+                        Max Qty
+                        <span class="req">*</span>
+                      </label>
+                      <input type="number" id="prodMaxQty" min="1" placeholder="100" required>
+                    </div>
+                  </div>
+                  <div class="fg">
+                    <label class="title">Availability</label>
+                    <div class="radio-group">
+                      <label class="radio-card">
+                        <input type="radio" name="avail" value="In Stock" checked>
+                        <div class="card">
+                          <span class="icon">✅</span>
+                          <span class="text">In Stock</span>
+                        </div>
+                      </label>
+                      <label class="radio-card">
+                        <input type="radio" name="avail" value="Low Stock">
+                        <div class="card">
+                          <span class="icon">⚠️</span>
+                          <span class="text">Low Stock</span>
+                        </div>
+                      </label>
+                      <label class="radio-card">
+                        <input type="radio" name="avail" value="Out of Stock">
+                        <div class="card">
+                          <span class="icon">❌</span>
+                          <span class="text">Out of Stock</span>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <!-- SIZE & COLOUR — shown only for Fashion/Footwear -->
+                <div class="form-sec" id="fashionSection" style="display:none">
+                  <h3 class="fs-title">
+                    👗 Sizes &amp; Colours
+                    <span style="font-weight:400;color:var(--text3);font-size:10px;text-transform:none;letter-spacing:0">(optional)</span>
+                  </h3>
+                  <div class="fg">
+                    <label>Available Sizes</label>
+                    <div class="size-chips-wrap" id="sizeChipsWrap"></div>
+                    <div class="size-custom-row">
+                      <input type="text" id="customSizeInput" placeholder="Add custom size (e.g. XL, 42, 10.5)">
+                      <button type="button" id="addCustomSizeBtn" class="btn-chip-add">+ Add</button>
+                    </div>
+                    <div class="hint">Tap to toggle. Selected sizes will be saved with the product.</div>
+                  </div>
+                  <div class="fg" style="margin-top:4px">
+                    <label>Available Colours</label>
+                    <div class="colour-chips-wrap" id="colourChipsWrap"></div>
+                    <div class="size-custom-row">
+                      <input type="text" id="customColourInput" placeholder="Add colour (e.g. Navy Blue)">
+                      <button type="button" id="addCustomColourBtn" class="btn-chip-add">+ Add</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-sec">
+                  <h3 class="fs-title">💳 Payment Methods</h3>
+                  <div class="check-group">
+                    <label class="check-card">
+                      <input type="checkbox" name="payment" value="online upi" checked>
+                      <div class="card">
+                        <span class="icon">💳</span>
+                        <span class="text">online upi</span>
+                      </div>
+                    </label>
+                    <label class="check-card">
+                      <input type="checkbox" name="payment" value="Cash on Delivery">
+                      <div class="card">
+                        <span class="icon">💵</span>
+                        <span class="text">Cash on Delivery</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-col">
+                <div class="form-sec">
+                  <h3 class="fs-title">🖼️ Product Images</h3>
+                  <div class="img-drop" id="imageUploadArea">
+                    <input type="file" id="imageInput" multiple accept="image/*" class="hidden-file">
+                    <div id="uploadPlaceholder" class="drop-ph">
+                      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="17 8 12 3 7 8" />
+                        <line x1="12" y1="3" x2="12" y2="15" />
+                      </svg>
+                      <p>
+                        Tap to pick images or
+                        <span class="drop-link">browse</span>
+                      </p>
+                      <small>PNG, JPG · Max images set by admin (default 4)</small>
+                    </div>
+                    <div id="imagePreviewGrid" class="img-preview-grid hidden"></div>
+                    <button type="button" class="add-more-btn" id="addMoreImgsBtn">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                      </svg>
+                      Add more images
+                    </button>
+                  </div>
+                  <div id="uploadProgress" class="up-prog hidden">
+                    <div class="prog-bar">
+                      <div id="progressFill" class="prog-fill"></div>
+                    </div>
+                    <span id="progressText">Uploading…</span>
+                  </div>
+                </div>
+                <div class="form-sec">
+                  <h3 class="fs-title">ℹ️ Additional Info</h3>
+                  <div class="fg">
+                    <label>Brand / Store Name</label>
+                    <input type="text" id="prodBrand" placeholder="Your brand or store">
+                  </div>
+                  <div class="fg">
+                    <label>SKU</label>
+                    <input type="text" id="prodSku" placeholder="SKU-001">
+                  </div>
+                  <div class="fg">
+                    <label>Weight (kg)</label>
+                    <input type="number" id="
